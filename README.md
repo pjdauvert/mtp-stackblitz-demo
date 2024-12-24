@@ -16,7 +16,7 @@ In your Stackblitz profile, setup the following environment variables:
 - `MONGODB_USER`
 - `MONGODB_PWD`
 - `MONGODB_BASE`
-- `GOOGLE_API_KEY`
+- `GOOGLE_API_KEY` or/and `DEEPL_API_KEY`
 
 If you run localy, you can setup the environment variables in your `.env` file.
 You can also set the `PORT` environment variable to the port you want to run the server on (default is `3000`).

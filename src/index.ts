@@ -1,7 +1,11 @@
 import server from './app';
 import MongodbService, { type MongodbConfig } from './db/connector';
+import debug from 'debug';
 
+const debugLog = debug('mtpdemo:index');
 async function startServer() {
+  debugLog('Starting server');
+  debugLog(JSON.stringify(process.env, null, 2));
   const config: MongodbConfig = {
     mongodbHost: process.env.MONGODB_HOST,
     mongodbUser: process.env.MONGODB_USER,
@@ -9,9 +13,6 @@ async function startServer() {
     mongodbBase: process.env.MONGODB_BASE,
     mongodbSrv: true,
   };
-
-  console.log(JSON.stringify(process.env, null, 2));
-  console.log(process.env.TEST_SECRET_KEY);
 
   const db = new MongodbService(config);
   await db.establishConnection().catch(() => process.exit(1));

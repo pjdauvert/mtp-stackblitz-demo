@@ -1,5 +1,8 @@
 import mongoose from 'mongoose';
 import uriFormat from 'mongodb-uri';
+import debug from 'debug';
+
+const debugLog = debug('mtpdemo:db:connector');
 
 export type MongodbConfig = {
   mongodbHost: string;
@@ -27,6 +30,7 @@ class MongoDBService {
    * @private
    */
   private getEncodedMongoURI(): string {
+    debugLog('getEncodedMongoURI');
     const mongodbAccount = this.config.mongodbUser
       ? `${this.config.mongodbUser}:${this.config.mongodbPwd}@`
       : '';
@@ -37,7 +41,7 @@ class MongoDBService {
     let uri = `${protocol}://${mongodbAccount}${this.config.mongodbHost}${port}/${this.config.mongodbBase}${params}`;
     const parsed = uriFormat.parse(uri);
     uri = uriFormat.format(parsed);
-    console.log(`MongoBD URI: ${uri}`);
+    debugLog(`MongoBD URI: ${uri}`);
     return uri;
   }
 
@@ -58,6 +62,7 @@ class MongoDBService {
    * @private
    */
   private attachConnectionListeners(): void {
+    debugLog('attachConnectionListeners');
     const events = [
       'connecting',
       'connected',
@@ -74,11 +79,11 @@ class MongoDBService {
     for (const event of events) {
       mongooseConnection.on(event, (...args: unknown[]) => {
         if (Array.isArray(args) && args.length > 0) {
-          console.log(
+          debugLog(
             `Mongoose connection service triggered an event: "${event}" with args: "${args}"`
           );
         } else {
-          console.log(
+          debugLog(
             `Mongoose connection service triggered an event: "${event}"`
           );
         }
@@ -92,11 +97,14 @@ class MongoDBService {
    * If the connection fails, it throws an error.
    */
   public async establishConnection(): Promise<void> {
+    debugLog('establishConnection');
     try {
       this.attachConnectionListeners();
+      debugLog('Connecting to MongoDB');
       await mongoose.connect(this.getEncodedMongoURI(), {
         //mongoose options
       });
+      debugLog('Connected to MongoDB');
     } catch (error) {
       console.error(
         `Error during MongoDB connection in MongoDBService::establishConnection ${error}`
@@ -109,6 +117,7 @@ class MongoDBService {
    * Given no parameters, it returns the MongoDB connection.
    */
   public getConnection(): mongoose.Connection {
+    debugLog('getConnection');
     return mongoose.connection;
   }
 }
