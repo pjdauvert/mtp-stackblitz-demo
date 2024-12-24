@@ -7,19 +7,22 @@ async function startServer() {
     mongodbUser: process.env.MONGODB_USER,
     mongodbPwd: process.env.MONGODB_PWD,
     mongodbBase: process.env.MONGODB_BASE,
+    mongodbAppName: process.env.MONGODB_APPNAME,
     mongodbSrv: true,
   };
 
-  console.log(JSON.stringify(process.env, null, 2));
-  console.log(process.env.TEST_SECRET_KEY);
-
   const db = new MongodbService(config);
-  await db.establishConnection().catch(() => process.exit(1));
+  await db.establishConnection();
 
   const port = process.env.PORT || 3000;
-  server.listen(port, () => {
+  server
+  .setTimeout(60000)
+  .listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
   });
 }
 
-startServer().catch(console.error);
+startServer().catch(error => {
+  console.error(error);
+  process.exit(1);
+});

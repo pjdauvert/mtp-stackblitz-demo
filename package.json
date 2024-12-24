@@ -1,5 +1,5 @@
 {
-  "name": "mongoose-translation-plugin-demo",
+  "name": "mtp-stackblitz-demo",
   "version": "1.0.0",
   "description": "This demo showcases the usage of mongoose translation plugin",
   "main": "index.ts",

@@ -4,6 +4,7 @@ import uriFormat from 'mongodb-uri';
 export type MongodbConfig = {
   mongodbHost: string;
   mongodbBase: string;
+  mongodbAppName: string;
   mongodbUser?: string;
   mongodbPwd?: string;
   mongodbPort?: string;
@@ -32,12 +33,13 @@ class MongoDBService {
       : '';
     const protocol = this.config.mongodbSrv ? 'mongodb+srv' : 'mongodb';
     const port = !this.config.mongodbSrv ? `:${this.config.mongodbPort}` : '';
-    const params = this.config.mongodbSrv ? '?retryWrites=true&w=majority' : '';
+    let params = this.config.mongodbSrv ? `?retryWrites=true&w=majority` : '';
+    if(this.config.mongodbAppName) params += `&appName=${this.config.mongodbAppName}`
 
-    let uri = `${protocol}://${mongodbAccount}${this.config.mongodbHost}${port}/${this.config.mongodbBase}${params}`;
+    let uri = `${protocol}://${mongodbAccount}${this.config.mongodbHost}${port}${params}`;
     const parsed = uriFormat.parse(uri);
     uri = uriFormat.format(parsed);
-    console.log(`MongoBD URI: ${uri}`);
+    //console.log(`MongoDB URI: ${uri}`);
     return uri;
   }
 
@@ -96,7 +98,9 @@ class MongoDBService {
       this.attachConnectionListeners();
       await mongoose.connect(this.getEncodedMongoURI(), {
         //mongoose options
+        dbName: this.config.mongodbBase,
       });
+      console.log('> Mongodb connection established');
     } catch (error) {
       console.error(
         `Error during MongoDB connection in MongoDBService::establishConnection ${error}`
