@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Mongoose Translation Plugin Demo</title>
+    <script>
+      const $ = document.querySelector.bind(document);
+
+      async function apiGet(url) {
+        const response = await fetch(url);
+        const json = await response.json();
+        $('#msg').value =
+          `fetch GET ${url} \n` + `${JSON.stringify(json, null, ' ')}`;
+      }
+    </script>
+  </head>
+  <body>
+    <h1>Mongoose Translation Plugin Demo</h1>
+    <br />
+    <button onclick="apiGet('/api/model/all')">Test GET entity</button>
+    <br />
+    <h2>Request result:</h2>
+    <textarea style="width: 100%; height: 100px" id="msg"></textarea>
+    <br />
+  </body>
+</html>
