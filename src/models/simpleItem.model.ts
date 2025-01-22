@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
-//import { TranslatableDocument, TranslatablePayload, TranslatedPlainObject, translationPlugin } from 'mongoose-translation-plugin';
-//import { getGoogleTranslations } from '../translator/googleAdapter';
+import { TranslatableDocument, translationPlugin } from 'mongoose-translation-plugin';
+import { GoogleTranslator } from '../translator/googleAdapter';
 const Schema = mongoose.Schema;
 
 export interface ISimpleItem extends mongoose.Document {
@@ -9,7 +9,7 @@ export interface ISimpleItem extends mongoose.Document {
   balance: number;
 }
 
-//type ISimpleDocument = ISimple & TranslatableDocument<ISimple>;
+type ISimpleDocument = ISimpleItem & TranslatableDocument<ISimpleItem>;
 
 const schema = new Schema({
   name: { type: String, required: true, unique: true },
@@ -17,7 +17,7 @@ const schema = new Schema({
   balance: Number,
 });
 
-//schema.plugin(translationPlugin, { translator: getGoogleTranslations });
+schema.plugin(translationPlugin, { provider: new GoogleTranslator() });
 
 export const SimpleItemModel = mongoose.model<ISimpleItem>(
   'SimpleItemModel',
