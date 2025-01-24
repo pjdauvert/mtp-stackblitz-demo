@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import { TranslatableDocument, translationPlugin } from 'mongoose-translation-plugin';
-import { GoogleTranslator } from '../translator/googleAdapter';
+import { DeepLTranslator } from '../translator/deeplAdapter';
 const Schema = mongoose.Schema;
 
 export interface ISimpleItem extends mongoose.Document {
@@ -12,14 +12,14 @@ export interface ISimpleItem extends mongoose.Document {
 type ISimpleDocument = ISimpleItem & TranslatableDocument<ISimpleItem>;
 
 const schema = new Schema({
-  name: { type: String, required: true, unique: true },
+  name: { type: String, required: true, unique: true, lowercase: true, trim: true, index: true, match: /^[a-z0-9]{3,10}$/ },
   description: { type: String, translatable: true },
   balance: Number,
 });
 
-schema.plugin(translationPlugin, { provider: new GoogleTranslator() });
+schema.plugin(translationPlugin, { provider: new DeepLTranslator() });
 
-export const SimpleItemModel = mongoose.model<ISimpleItem>(
+export const SimpleItemModel = mongoose.model<ISimpleDocument>(
   'SimpleItemModel',
   schema
 );

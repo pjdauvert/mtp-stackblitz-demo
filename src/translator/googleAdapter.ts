@@ -19,7 +19,7 @@ export class GoogleTranslator implements TranslationProvider {
   }
 
   private async validateLanguage(language: string): Promise<void> {
-    const sourceLanguages = await this.translator.getLanguages();
+    const [sourceLanguages, _metadata] = await this.translator.getLanguages();
     for (let i = 0; i < sourceLanguages.length; i++) {
       const lang = sourceLanguages[i];
       if (lang.code === language) {
@@ -40,7 +40,7 @@ export class GoogleTranslator implements TranslationProvider {
         to,
         model: 'nmt'
       });
-      debugLog(`Translations: ${translations}, Metadata: ${metadata}`);
+      debugLog(`Translations: ${translations}, Metadata: ${JSON.stringify(metadata, null, 2)}`);
       return Array.isArray(translations) ? translations : [translations];
     } catch (error) {
       const err = error as Error;

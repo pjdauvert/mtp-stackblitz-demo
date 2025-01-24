@@ -25,7 +25,7 @@ export class DeepLTranslator implements TranslationProvider {
       }
     });
     this.textTranslationOptions = {
-      formality: 'more'
+      //formality: 'more'
     };
   }
 
@@ -53,10 +53,15 @@ export class DeepLTranslator implements TranslationProvider {
 
   public getTranslations: TranslatorFunction = async ({ text, from, to }) => {
     await this.validateSourceLanguage(from);
-    await this.validateTargetLanguage(to);
+    // Deepl requires the language to be in the format of "en-US" for english.
+    let targetLanguage = to;
+    if (to === 'en') {
+      targetLanguage = 'en-US';
+    }
+    await this.validateTargetLanguage(targetLanguage);
     try {
       debugLog(`Translating ${text} from ${from} to ${to}`);
-      const [translations] = await this.translator.translateText(text, from as SourceLanguageCode, to as TargetLanguageCode, this.textTranslationOptions);
+      const [translations] = await this.translator.translateText(text, from as SourceLanguageCode, targetLanguage as TargetLanguageCode, this.textTranslationOptions);
       debugLog(`Translations: ${JSON.stringify(translations, null, 2)}`);
       return Array.isArray(translations) ? translations.map((t) => t.text) : [translations?.text || ''];
     } catch (error) {

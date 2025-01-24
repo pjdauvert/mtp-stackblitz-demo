@@ -1,0 +1,122 @@
+[
+    {
+        "name": "item1",
+        "balance": 3,
+        "description": "The only limit to our realization of tomorrow is our doubts of today. - Franklin D. Roosevelt",
+        "language": "en"
+    },
+    {
+        "name": "item2",
+        "balance": 7,
+        "description": "La vie est ce qui arrive quand vous êtes occupé à faire d'autres projets. - John Lennon",
+        "language": "fr"
+    },
+    {
+        "name": "item3",
+        "balance": 5,
+        "description": "In the end, we will remember not the words of our enemies, but the silence of our friends. - Martin Luther King Jr.",
+        "language": "en"
+    },
+    {
+        "name": "item4",
+        "balance": 9,
+        "description": "Das Leben ist, was passiert, während du eifrig dabei bist, andere Pläne zu machen. - John Lennon",
+        "language": "de"
+    },
+    {
+        "name": "item5",
+        "balance": 2,
+        "description": "La única limitación para la realización de mañana son nuestras dudas de hoy. - Franklin D. Roosevelt",
+        "language": "es"
+    },
+    {
+        "name": "item6",
+        "balance": 8,
+        "description": "La vita è ciò che accade mentre sei impegnato a fare altri progetti. - John Lennon",
+        "language": "it"
+    },
+    {
+        "name": "item7",
+        "balance": 4,
+        "description": "The only thing we have to fear is fear itself. - Franklin D. Roosevelt",
+        "language": "en"
+    },
+    {
+        "name": "item8",
+        "balance": 6,
+        "description": "La seule chose que nous devons craindre est la peur elle-même. - Franklin D. Roosevelt",
+        "language": "fr"
+    },
+    {
+        "name": "item9",
+        "balance": 1,
+        "description": "In the end, it's not the years in your life that count. It's the life in your years. - Abraham Lincoln",
+        "language": "en"
+    },
+    {
+        "name": "item10",
+        "balance": 10,
+        "description": "Am Ende zählen nicht die Jahre in deinem Leben, sondern das Leben in deinen Jahren. - Abraham Lincoln",
+        "language": "de"
+    },
+    {
+        "name": "item11",
+        "balance": 3,
+        "description": "Al final, no son los años en tu vida los que cuentan. Es la vida en tus años. - Abraham Lincoln",
+        "language": "es"
+    },
+    {
+        "name": "item12",
+        "balance": 7,
+        "description": "Alla fine, non sono gli anni della tua vita che contano. È la vita nei tuoi anni. - Abraham Lincoln",
+        "language": "it"
+    },
+    {
+        "name": "item13",
+        "balance": 5,
+        "description": "The best way to predict the future is to create it. - Peter Drucker",
+        "language": "en"
+    },
+    {
+        "name": "item14",
+        "balance": 9,
+        "description": "La meilleure façon de prédire l'avenir est de le créer. - Peter Drucker",
+        "language": "fr"
+    },
+    {
+        "name": "item15",
+        "balance": 2,
+        "description": "Die beste Art, die Zukunft vorherzusagen, ist, sie zu erschaffen. - Peter Drucker",
+        "language": "de"
+    },
+    {
+        "name": "item16",
+        "balance": 8,
+        "description": "La mejor manera de predecir el futuro es crearlo. - Peter Drucker",
+        "language": "es"
+    },
+    {
+        "name": "item17",
+        "balance": 4,
+        "description": "Il modo migliore per predire il futuro è crearlo. - Peter Drucker",
+        "language": "it"
+    },
+    {
+        "name": "item18",
+        "balance": 6,
+        "description": "The only limit to our realization of tomorrow is our doubts of today. - Franklin D. Roosevelt",
+        "language": "en"
+    },
+    {
+        "name": "item19",
+        "balance": 1,
+        "description": "La vie est ce qui arrive quand vous êtes occupé à faire d'autres projets. - John Lennon",
+        "language": "fr"
+    },
+    {
+        "name": "item20",
+        "balance": 10,
+        "description": "Das Leben ist, was passiert, während du eifrig dabei bist, andere Pläne zu machen. - John Lennon",
+        "language": "de"
+    }
+]

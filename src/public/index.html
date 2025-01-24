@@ -6,21 +6,207 @@
     <script>
       const $ = document.querySelector.bind(document);
 
-      async function apiGet(url) {
-        const response = await fetch(url);
+      async function apiGetAll() {
+        const language = $('#language').value;
+        const useLanguageParam = $('input[name="entityFetch"]:checked').value === 'translated';
+        const urlToFetch = useLanguageParam ? `/api/model/all?language=${language}` : `/api/model/all`;
+        const response = await fetch(urlToFetch);
         const json = await response.json();
         $('#msg').value =
-          `fetch GET ${url} \n` + `${JSON.stringify(json, null, ' ')}`;
+          `fetch GET ${urlToFetch} \n` + `${JSON.stringify(json, null, ' ')}`;
+      }
+
+      async function apiGetOne() {
+        const entityName = $('#entityName').value;
+        const language = $('#language').value;
+        const useLanguageParam = $('input[name="entityFetch"]:checked').value === 'translated'; 
+        if(!entityName) {
+          $('#msg').value = 'Please select an entity name';
+          return;
+        }
+        const urlToFetch = useLanguageParam ? `/api/model/${entityName}?language=${language}` : `/api/model/${entityName}`;
+        const response = await fetch(urlToFetch);
+        const json = await response.json();
+        if(!useLanguageParam && response.status === 200 && json.description) {
+          $('#modifyDescription').value = json.description;
+        }
+        $('#msg').value = `fetch GET ${urlToFetch} \n` + `${JSON.stringify(json, null, ' ')}`;
+      }
+
+      async function apiCreate() {
+        const name = $('#name').value;
+        const balance = $('#balance').value;
+        const description = $('#description').value;
+        const language = $('#creation-language').value;
+
+        const body = JSON.stringify({
+          name,
+          balance,
+          description,
+          language
+        });
+
+        const response = await fetch('/api/model', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body
+        });
+
+        const json = await response.json();
+        $('#msg').value =
+          `fetch POST /api/model \n` + `${JSON.stringify(json, null, ' ')}`;
+      }
+
+      async function modifyDescription() {
+        const description = $('#modifyDescription').value;
+        const entityName = $('#entityName').value;
+        if(!entityName) {
+          $('#msg').value = 'Please select an entity name';
+          return;
+        }
+        const response = await fetch(`/api/model/${entityName}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ description })
+        });
+        const json = await response.json();
+        $('#msg').value = `fetch PUT /api/model/${entityName} \n` + `${JSON.stringify(json, null, ' ')}`;
+      }
+    
+      async function apiDeleteAll() {
+        const response = await fetch('/api/model', {
+          method: 'DELETE'
+        });
+        const json = await response.json();
+        $('#msg').value = `fetch DELETE /api/model \n` + `${JSON.stringify(json, null, ' ')}`;
+      }
+
+      async function apiSeed() {
+        const response = await fetch('/api/model/seed', {
+          method: 'POST'
+        });
+        const json = await response.json();
+        $('#msg').value = `fetch POST /api/model/seed \n` + `${JSON.stringify(json, null, ' ')}`;
+      }
+
+      async function disableAutoTranslation() {
+        const entityName = $('#entityName').value;
+        const language = $('#language').value;
+        const useLanguageParam = $('input[name="entityFetch"]:checked').value === 'translated';
+        if(!useLanguageParam || !language || !entityName) {
+          $('#msg').value = 'Please select a language and an entity name';
+          return;
+        }
+        const response = await fetch(`/api/model/${entityName}/disableAutoTranslation/${language}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ autoTranslate: false })
+        });
+        const json = await response.json();
+        $('#msg').value = `fetch PUT /api/model/${entityName}/disableAutoTranslation \n` + `${JSON.stringify(json, null, ' ')}`;
       }
     </script>
   </head>
-  <body>
+  <body style="display: flex; flex-direction: column; height: 100vh;">
     <h1>Mongoose Translation Plugin Demo</h1>
     <br />
-    <button onclick="apiGet('/api/model/all')">Test GET entity</button>
-    <br />
-    <h2>Request result:</h2>
-    <textarea style="width: 100%; height: 100px" id="msg"></textarea>
-    <br />
+    <h2>Create entity</h2>
+    <div style="display: flex; flex-direction: column; align-items: flex-start;">
+      <div style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+        <button onclick="apiDeleteAll()">Delete All</button>
+        <button onclick="apiSeed()">Seed</button>
+      </div>
+      <div style="display: flex; flex-direction: row; align-items: center;">
+        <label for="name" style="width: 250px; margin-right: 10px;">Name (3 to 10 alphanumeric characters):</label>
+        <input type="text" id="name" pattern="[a-zA-Z0-9]{3,10}" required />
+      </div>
+      <br />
+      <div style="display: flex; flex-direction: row; align-items: center;">
+        <label for="balance" style="width: 250px; margin-right: 10px;">Balance (number):</label>
+        <input type="number" id="balance" required />
+      </div>
+      <br />
+      <div style="display: flex; flex-direction: row; align-items: center;">
+        <label for="creation-language" style="width: 250px; margin-right: 10px;">Language:</label>
+        <select id="creation-language" required>
+          <option value="en" selected>English</option>
+          <option value="es">Spanish</option>
+          <option value="de">German</option>
+          <option value="fr">French</option>
+          <option value="it">Italian</option>
+        </select>
+      </div>
+      <br />
+      <div style="display: flex; flex-direction: row; align-items: center;">
+        <label for="description" style="width: 250px; margin-right: 10px;">Description:</label>
+        <textarea id="description" style="width: 600px; height: 50px;" required></textarea>
+      </div>
+      <br />
+      <button onclick="apiCreate()">Submit</button>
+    </div>
+    <hr style="width: 100%; margin: 5px 0;" />
+    <h2>Test GET entity</h2>
+    <div style="display: flex; flex-direction: column; align-items: flex-start; margin-top: 10px;">
+      <!-- Radio buttons for Entity fetch -->
+      <div style="display: flex; flex-direction: row; align-items: center; margin-bottom: 8px;">
+        <label>Entity fetch:</label>
+        <input type="radio" id="raw" name="entityFetch" value="raw" checked>
+        <label for="raw">Raw</label>
+        <input type="radio" id="translated" name="entityFetch" value="translated">
+        <label for="translated">Translated</label>
+      </div>
+      <!-- Language Selection -->
+      <div style="display: flex; flex-direction: row; align-items: center; margin-bottom: 8px;">
+        <label for="language" style="width: 250px; margin-right: 10px;">Select Language:</label>
+        <select id="language" disabled>
+          <option value="en" selected>English</option>
+          <option value="es">Spanish</option>
+          <option value="de">German</option>
+          <option value="fr">French</option>
+          <option value="it">Italian</option>
+        </select>
+      </div>
+      <!-- Get All Entities -->
+      <div style="display: flex; flex-direction: row; align-items: center; margin-bottom: 8px;">
+        <button onclick="apiGetAll()">Test GET all entities</button>
+      </div>
+      <!-- Get Entity by Name -->
+      <div style="display: flex; flex-direction: row; align-items: center; margin-bottom: 8px;">
+        <label for="entityName" style="width: 250px; margin-right: 10px;">Entity Name:</label>
+        <input type="text" id="entityName" required />
+        <button onclick="apiGetOne()" style="margin-left: 10px;">Test GET entity by name</button>
+        <button onclick="disableAutoTranslation()" style="margin-left: 10px;" disabled id="disableAutoTranslationButton">Disable AutoTranslation</button>
+      </div>
+      <div style="display: flex; flex-direction: row; align-items: center; margin-bottom: 8px;">
+        <label for="modifyDescription" style="width: 250px; margin-right: 10px;">Description:</label>
+        <textarea id="modifyDescription" style="width: 600px; height: 50px;"></textarea>
+        <button onclick="modifyDescription()" style="margin-left: 10px;">Modify Description</button>
+      </div>
+    </div>
+    <div style="flex-grow: 1; display: flex; flex-direction: column;">
+      <h3>Request result:</h2>
+      <textarea style="width: 100%; height: 100%; flex-grow: 1;" id="msg"></textarea>
+    </div>
   </body>
+  <script>
+    document.querySelectorAll('input[name="entityFetch"]').forEach((elem) => {
+      elem.addEventListener('change', function(event) {
+        const languageSelect = $('#language');
+        const disableAutoTranslationButton = $('#disableAutoTranslationButton');
+        if (event.target.value === 'translated') {
+          languageSelect.disabled = false;
+          disableAutoTranslationButton.disabled = false;
+        } else {
+          languageSelect.disabled = true;
+          disableAutoTranslationButton.disabled = true;
+        }
+      });
+    });
+  </script>
 </html>
